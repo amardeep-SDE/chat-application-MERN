@@ -8,26 +8,31 @@ import { BASE_URL } from '..';
 const SendInput = () => {
     const [message, setMessage] = useState("");
     const dispatch = useDispatch();
-    const {selectedUser} = useSelector(store=>store.user);
-    const {messages} = useSelector(store=>store.message);
+    const { selectedUser } = useSelector(store => store.user);
+    const { messages } = useSelector(store => store.message);
 
     const onSubmitHandler = async (e) => {
         e.preventDefault();
+
+        if (!selectedUser || !selectedUser._id) {
+            console.error("No user selected to send message");
+            return;
+        }
+
         try {
-            const res = await axios.post(`http://localhost:8000/api/v1/message/send/${selectedUser?._id}`, {message}, {
-                headers:{
-                    'Content-Type':'application/json'
-                },
-                withCredentials:true
+            const res = await axios.post(`${BASE_URL}/api/v1/message/send/${selectedUser._id}`, { message }, {
+                headers: { 'Content-Type': 'application/json' },
+                withCredentials: true
             });
-            console.log(res);
-            
-            dispatch(setMessages([...messages, res?.data?.newMessage]))
+
+            dispatch(setMessages([...messages, res?.data?.newMessage]));
         } catch (error) {
             console.log(error);
-        } 
+        }
+
         setMessage("");
-    }
+    };
+    
     return (
         <form onSubmit={onSubmitHandler} className='px-4 my-3'>
             <div className='w-full relative'>
