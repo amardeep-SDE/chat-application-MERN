@@ -20,7 +20,7 @@ const SendInput = () => {
         }
 
         try {
-            const res = await axios.post(`${BASE_URL}/api/v1/message/send/${selectedUser._id}`, { message }, {
+            const res = await axios.post(`https://chat-application-mern-7xfi.onrender.com/api/v1/message/send/${selectedUser._id}`, { message }, {
                 headers: { 'Content-Type': 'application/json' },
                 withCredentials: true
             });
